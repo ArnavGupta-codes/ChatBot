@@ -14,9 +14,17 @@ def catalogue_pdf():
 @app.route("/ask", methods=["POST"])
 def ask():
     user_prompt = request.json.get("prompt")
-    from main import embed_model, client, retrieve_relevant_chunks
-    relevant_chunks = retrieve_relevant_chunks(user_prompt, embed_model, client)
-    answer = generate_answer(user_prompt, relevant_chunks)
+    history = request.json.get("history", [])
+    from main import embed_model, client, retrieve_relevant_chunks, generate_answer
+    # Build a context string from the last 4-5 messages
+    history_context = "\n".join([
+        ("You: " if h["role"] == "user" else "Bot: ") + h["content"] for h in history[-5:]
+    ])
+    # Combine the chat history and the current prompt for retrieval
+    retrieval_query = history_context + ("\nYou: " if history_context else "") + user_prompt
+    relevant_chunks = retrieve_relevant_chunks(retrieval_query, embed_model, client)
+    # Pass both the chat history and the answer context to the LLM
+    answer = generate_answer(user_prompt, relevant_chunks, history_context=history_context)
     return jsonify({"answer": answer})
 
 if __name__ == "__main__":

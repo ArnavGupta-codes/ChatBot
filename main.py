@@ -62,14 +62,17 @@ def retrieve_relevant_chunks(query, embedding_model, client, top_k=20):
     relevant_chunks = results['documents'][0]
     return relevant_chunks
 
-def generate_answer(query, relevant_chunks):
+
+def generate_answer(query, relevant_chunks, history_context=None):
     context = '\n'.join(relevant_chunks)
+    chat_history = f"\nChat History:\n{history_context}\n---\n" if history_context else ""
     prompt_template = f"""
-    Answer the question based only on the provided context. If you cannot answer the question from the context, say "I'm sorry, I dont know"
+    Answer the question based only on the provided context and the chat history. If you cannot answer the question from the context, say "I'm sorry, I dont know".
     Context:
     ---
     {context}
     ---
+    {chat_history}
     Question:
     ---
     {query}
