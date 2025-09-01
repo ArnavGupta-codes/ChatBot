@@ -2,6 +2,8 @@
 
 A conversational chatbot web app that uses Retrieval-Augmented Generation (RAG) to answer questions about your PDF dataset. Built with Flask, Gemini API, and modern NLP tools.
 
+https://github.com/user-attachments/assets/f2d114e8-57bb-46a2-8918-87dd6a4dd2a2
+
 ## Features
 - Chat interface (remembers last 4-5 messages for context)
 - Answers questions using information from a PDF
@@ -56,4 +58,8 @@ A conversational chatbot web app that uses Retrieval-Augmented Generation (RAG) 
 ## Customization
 - To use a different PDF, replace the file in `static/` and update the path in `main.py` if needed.
 - The chat UI and memory can be further customized in `templates/index.html`.
+
+
+
+
 
