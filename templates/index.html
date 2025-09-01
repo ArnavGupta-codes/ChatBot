@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RAG Web Interface</title>
+</head>
+<body>
+  <h1>Explore the Dataset</h1>
+  <iframe src="/Inductions_Catalogue.pdf" width="600" height="800"></iframe>
+
+  <h2>Ask a Question</h2>
+  <input type="text" id="prompt" placeholder="Enter your question">
+  <button onclick="ask()">Ask</button>
+  
+  <pre id="answer"></pre>
+
+  <script>
+    async function ask() {
+      const prompt = document.getElementById("prompt").value;
+      const res = await fetch("/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+      const data = await res.json();
+      document.getElementById("answer").textContent = data.answer;
+    }
+  </script>
+</body>
+</html>
