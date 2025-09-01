@@ -1,5 +1,5 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify
-from main import generate_answer  # Adapted RAG function from main.py
+from main import generate_answer
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
@@ -20,10 +20,8 @@ def ask():
     history_context = "\n".join([
         ("You: " if h["role"] == "user" else "Bot: ") + h["content"] for h in history[-5:]
     ])
-    # Combine the chat history and the current prompt for retrieval
     retrieval_query = history_context + ("\nYou: " if history_context else "") + user_prompt
     relevant_chunks = retrieve_relevant_chunks(retrieval_query, embed_model, client)
-    # Pass both the chat history and the answer context to the LLM
     answer = generate_answer(user_prompt, relevant_chunks, history_context=history_context)
     return jsonify({"answer": answer})
 
@@ -31,3 +29,4 @@ if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, port=port)
+
